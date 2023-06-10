@@ -32,9 +32,7 @@ jobs:
           wait-on: http://localhost:5000
       - name: deploy to fly.io
         if: ${{ github.event_name == 'push' && !contains(join(toJson(github.event.commits.*.message)), '#skip') }}
-        run: |
-          flyctl deploy --remote-only
-          export APP_URL=$(flyctl info --output json | jq -r '.app.urls[0]')
+        run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: Job success
@@ -43,7 +41,7 @@ jobs:
         with:
           severity: info
           text: A new version of Pokédex deployed
-          description: "to ${{ env.APP_URL }} by ${{ github.event.head_commit.author.name }}"
+          description: "to https://throbbing-leaf-6979.fly.dev/ by ${{ github.actor }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Job failure
         if: ${{ failure() }}
@@ -51,7 +49,7 @@ jobs:
         with:
           severity: error
           text: Build failed
-          description: "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by ${{ github.event.head_commit.author.name }} broke the build :("
+          description: "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by ${{ github.actor }} broke the build :("
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [simple_deployment_pipeline]
