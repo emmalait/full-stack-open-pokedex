@@ -1,8 +1,6 @@
 # Full Stack open CI/CD
 
-This repository is used for the CI/CD module of the Full stack open course
-
-Fork the repository to complete course exercises
+App created for exercise 11.20: [Anecdotes app](https://github.com/emmalait/anecdotes-app)
 
 ## Commands
 
